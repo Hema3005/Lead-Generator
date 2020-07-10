@@ -3,6 +3,8 @@ import requests
 from bs4 import BeautifulSoup
 
 import spacy
+import json
+import csv
 
 #load the language model instance in spacy
 nlp =spacy.load('en_core_web_sm') 
@@ -81,6 +83,13 @@ def save_to_json(filename : str ,json_dict : dict)-> None:
             f.write(json.dumps(json_dict, sort_keys=False, indent=2, separators=(',', ': ')))
      
 
+def json_to_csv_file(json_filename  : str ,csv_filename : str)-> None:
+    with open(json_filename) as json_file: 
+        data = json.load(json_file)
+    csv_writer = csv.writer(data_file)
+    data_file = open(csv_filename, 'w')
+    for item in data:
+        csv_writer.writerow(item)
 
 
 url = "http://www.econtentmag.com/Articles/Editorial/Feature/The-Top-100-Companies-in-the-Digital-Content-Industry-The-2016-2017-EContent-100-114156.htm"
@@ -99,6 +108,7 @@ for company in comName_contactUrl_list:
      loction_list=get_location(text)
      com_dict[name]=loction_list
 save_to_json=(filename,com_list)
+json_to_csv_file(filename,"ref.csv")
 
 
 
