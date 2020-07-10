@@ -63,14 +63,14 @@ def get_contact_page_link(html : str )-> list:
 
 def get_location(text : str)-> list:
     loc_list=[]
-    doc = nlp(data)
+    doc = nlp(text)
 #itrate each entity and append in list 
     for ent in doc.ents:
             if "GPE" in ent.label_ :
-                data_list.append(ent.text)
-#remove repeated name and their entity 
+                loc_list.append(ent.text)
+#remove repeated name 
     com_loc_list= [] 
-    [com_loc_list.append(x) for x in data_list if x not in res ]
+    [com_loc_list.append(x) for x in loc_list if x not in com_loc_list ]
 
     return com_loc_list
 
@@ -88,7 +88,7 @@ for company in comName_contactUrl_list:
      url=company[1]
      text=get_webpage_text(url)
      loction_list=get_location(text)
-     print({name:loction_list)
+     print({name:loction_list})
 
 
 
