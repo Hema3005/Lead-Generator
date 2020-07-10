@@ -74,6 +74,12 @@ def get_location(text : str)-> list:
 
     return com_loc_list
 
+def save_to_json(filename : str ,json_dict : dict)-> None:
+
+     with open(filename, "a") as f:
+#write all the entites data in json
+            f.write(json.dumps(json_dict, sort_keys=False, indent=2, separators=(',', ': ')))
+    
 
 url = "http://www.econtentmag.com/Articles/Editorial/Feature/The-Top-100-Companies-in-the-Digital-Content-Industry-The-2016-2017-EContent-100-114156.htm"
 
@@ -81,14 +87,14 @@ url = "http://www.econtentmag.com/Articles/Editorial/Feature/The-Top-100-Compani
 page_html=get_webpage(url)
 # to get list conataining company name and contact url
 comName_contactUrl_list=get_contact_page_link(page_html)
-
+filename="ref.json"
 for company in comName_contactUrl_list:
      
      name=company[0]
      url=company[1]
      text=get_webpage_text(url)
      loction_list=get_location(text)
-     print({name:loction_list})
+     save_to_json=(filename,{name:loction_list})
 
 
 
