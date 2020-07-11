@@ -52,7 +52,7 @@ def get_contact_page_link(html : str )-> list:
     companyName_list=get_list(page_html)
     contact_list=[]
     
-    for name_list in companyName_list[:2]:
+    for name_list in companyName_list[:1]:
        try:
         com_name=name_list[0]
         com_url=name_list[1]
@@ -61,7 +61,7 @@ def get_contact_page_link(html : str )-> list:
         soup = BeautifulSoup(com_html, 'lxml')
         a_tag = soup.findAll('a')
         for name in a_tag:
-            if  "About" in name.text:
+            if  "About" and "Contact" in name.text:
                 
                 contact_list.append([com_name,com_url+name.get('href')])
        except:
@@ -113,43 +113,45 @@ def json_to_csv_file(json_filename  : str ,csv_filename : str)-> None:
             writer.writerows(temp) 
 
 
+if __name__ == "__main__":
+    
+    url = "http://www.econtentmag.com/Articles/Editorial/Feature/The-Top-100-Companies-in-the-Digital-Content-Industry-The-2016-2017-EContent-100-114156.htm"
 
-url = "http://www.econtentmag.com/Articles/Editorial/Feature/The-Top-100-Companies-in-the-Digital-Content-Industry-The-2016-2017-EContent-100-114156.htm"
+    html= get_webpage(url)
 
-html= get_webpage(url)
+    company_list=get_list(html)
 
-company_list=get_list(html)
+    print(company_list)
 
-print(company_list)
-
-print("company name and url extracted!!!")
+    print("company name and url extracted!!!")
 
 
 #to get page html
-page_html=get_webpage(url)
+    page_html=get_webpage(url)
 # to get list conataining company name and contact url
-comName_contactUrl_list=get_contact_page_link(page_html)
+    comName_contactUrl_list=get_contact_page_link(page_html)
 
-print(" Getting  companyname and contact url list ")
-print(comName_contactUrl_list)
-print("\n")
+    print(" Getting  companyname and contact url list ")
+    print(comName_contactUrl_list)
+    print("\n")
 
-filename="ref.json"
-com_dict={}
-for company in comName_contactUrl_list:
-     name=company[0]
-     url=company[1]
-     text=get_webpage_text(url)
+    filename="ref.json"
+    com_dict={}
+    for company in comName_contactUrl_list:
+        name=company[0]
+        url=company[1]
+        text=get_webpage_text(url)
     #  print(text)
-     loction_list=get_location(text)
+        loction_list=get_location(text)
      
-     com_dict[name]=loction_list
-     print("\n")
-print(com_dict)
-save_to_json(filename,com_dict)
-print("\nsave to json file successfully\n")
-json_to_csv_file(filename,"ref.csv")
-print("Json to csv convert sucessfullly\n")
+        com_dict[name]=loction_list
+        # com_dict.update({"Comapny name":name,"location:"loction_list})
+        print("\n")
+    print(com_dict)
+    save_to_json(filename,com_dict)
+    print("\nsave to json file successfully\n")
+    json_to_csv_file(filename,"ref.csv")
+    print("Json to csv convert sucessfullly\n")
 
 
 
