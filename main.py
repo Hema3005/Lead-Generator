@@ -118,7 +118,7 @@ if __name__ == '__main__':
     logger=logging.getLogger()
     #Setting the threshold of logger to DEBUG
     logger.setLevel(logging.DEBUG)
-    logger.info("List of companies that has no contact details")
+    logger.info("List of companies that has no contact details and no address details")
 
     #starts from here
     url = "http://www.econtentmag.com/Articles/Editorial/Feature/The-Top-100-Companies-in-the-Digital-Content-Industry-The-2016-2017-EContent-100-114156.htm"
@@ -160,8 +160,9 @@ if __name__ == '__main__':
             else:
                 print("no contact page for "+company[0]+"\n")
                 logger.setLevel(logging.DEBUG)
+                logger.info("NO CONTACT DETAILS")
                 logger.info(company[0])
-                logger.info(company[1])
+            
     print("list of  company with its contact url: ")
     print("\n\n")
     #print company  contact list
@@ -170,24 +171,41 @@ if __name__ == '__main__':
     print("No. of company has contact list : ",len(all_contact_list))
     print("\n\n")
     
-    contact_link_list=[["Acquire Media","http://acquiremedia.com/contactus/"],["Apple, Inc.","https://www.apple.com/contact/"],["Aptara, Inc.","https://www.aptaracorp.com/about-aptara/contact-us"],["Act-On Software","https://act-on.com/contact-us/"],["Acquia, Inc","https://www.acquia.com/about-us/contact"],["Acrolinx GmbH","https://www.acrolinx.com/contact/"],["Zoomin","https://www.zoominsoftware.com/contact-us/"],["Wochit","https://www.wochit.com/contact/"]]
+    no_address_list=[]
     final_dict={}
-    for item in contact_link_list:
+    for item in all_contact_list:
         company_name=item[0]
-        companyContact_url=item[1]
+        companyContact_url=item[1][0]
         #getting contact url html 
         page_html=get_webpage(companyContact_url)
-        #getting contact url text
-        page_text=get_webpage_text(page_html)
-        #getting location_list
-        location_list=get_location(page_text)
-        final_dict.update({company_name:location_list})
-        print("Company name:",company_name)
-        print("Addresses:\n",location_list)
-        print("\n")
-    print("\n")
+        if page_html==None:
+            no_address_list.append(company_name)
+            pass
+        else:
+            #getting contact url text
+            page_text=get_webpage_text(page_html)
+            #getting location_list
+            location_list=get_location(page_text)
+            if len(location_list):
+                final_dict.update({company_name:location_list})
+                print("Company name:",company_name)
+                print("Addresses:\n",location_list)
+                print("\n")
+            else:
+                no_address_list.append(company_name)
+
+    
+    print("\nCompany with address:\n")
     print(final_dict)
+    print("\nList to companies not have address:\n ")
+    print(no_address_list)
+    logger.info("NO ADDRESS DETAILS")
+    #company has no adress store in log file
+    for name in no_address_list:
+        logger.setLevel(logging.DEBUG)
+        logger.info(name)
+      
     filename="company_address.json"
     save_to_json(filename,final_dict)
     json_to_csv_file(filename,"company_address.csv")
-    print("Company may not have contact page stored in Log file\n Check\"Company_details.log\" ")
+    print("Company may not have contact page and adress details stored in Log file.\nCheck \"Company_details.log\" ")
