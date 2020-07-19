@@ -4,7 +4,6 @@ import Get_Address #create module to get address
 import json
 import csv
 import re
-import usaddress
 import logging
 
 
@@ -50,15 +49,16 @@ def get_contact_page_link(html : str )-> list:
             link=tag.attrs['href']
         
             name=tag.text
-            title=["Contact","Offices","about","contact","support"]
+            title=["Contact","Offices","About","LOCATION","contact","support","Locations","Media Kit","Offices Locations","Terms of use","Legal Disclosure"]
             for item in title:
                 if item in name:
+                
                     contact_list.append(link)
         
         except:
             link=tag.get('href')
             name=tag.text
-            title=["Contact","Offices","about","contact","support"]
+            title=["Contact","Offices","About","LOCATION","contact","Legal Disclosure","support","Locations","Media Kit","Offices Locations","Terms of use"]
             for item in title:
                 if item in name:
                     contact_list.append(link)
@@ -124,7 +124,7 @@ if __name__ == '__main__':
     url = "http://www.econtentmag.com/Articles/Editorial/Feature/The-Top-100-Companies-in-the-Digital-Content-Industry-The-2016-2017-EContent-100-114156.htm"
     #getting html content
     html= get_webpage(url)
-    print("html content of The Top 100 Companies in the Digital Content Industry: The 2016-2017 EContent 100")
+    print("Html content of The Top 100 Companies in the Digital Content Industry: The 2016-2017 EContent 100")
     # print(html)
     print("\n\n")
     #getting company list
@@ -138,17 +138,25 @@ if __name__ == '__main__':
     print("\n\n")
     
     all_contact_list=[]
+    no_contact_list=[]
+    logger.info("No CONTACT DETAILS Companies:\n")
     #testing for 1st ten companies
-    for company in company_list[:10]:
+    for company in company_list:
         contact_list=[]
         url=company[1]
         html=get_webpage(url)
         if html==None:
             print("could not get contact page for :"+company[0]+"\n")
+            no_contact_list .append(company[0])
+            logger.setLevel(logging.DEBUG)
+            logger.info(company[0])
             pass
         else:
+
             #getting contact list of each company 
-            contact_page_list=get_contact_page_link(html)
+          contact_page_list=get_contact_page_link(html)
+          print(contact_page_list)
+          try:
             if len(contact_page_list):
                 print("got contact page links for :"+company[0]+"\n")
                 for item in contact_page_list:
@@ -159,8 +167,13 @@ if __name__ == '__main__':
                 all_contact_list.append([company[0],contact_list])
             else:
                 print("no contact page for "+company[0]+"\n")
+                no_contact_list .append(company[0])
                 logger.setLevel(logging.DEBUG)
-                logger.info("NO CONTACT DETAILS")
+                logger.info(company[0])
+          except:
+                print("no contact page for "+company[0]+"\n")
+                no_contact_list.append(company[0])
+                logger.setLevel(logging.DEBUG)
                 logger.info(company[0])
             
     print("list of  company with its contact url: ")
@@ -169,37 +182,80 @@ if __name__ == '__main__':
     print(all_contact_list)
     print("\n\n")
     print("No. of company has contact list : ",len(all_contact_list))
+    print("no contact list :",len(no_contact_list))
     print("\n\n")
-    
+
+    filteredContact_list=[]
+    index0_list= ['Acrolinx GmbH', 'Act-On Software, Inc.', 'Amazon.com, Inc.', 'Apple, Inc.', 'Aptara, Inc.','COGNITIVESCALE', 'Ceros, Inc', 'Ceros, Inc.', 'Clarabridge',  'Connotate', 'EBSCO Industries, Inc.', 'Elsevier', 'Google',  'LinkedIn', 'MadCap Software, Inc.', 'Netflix', 'OneSpot', 'Pivotshare', 'SDL PLC', 'Sitecore Corp. AS', 'Sizmek, Inc.', 'Spotify AB', 'Syncfusion,Inc.', 'TERMINALFOUR, Inc.', 'Wochit','Siteworx, LLC','Syncfusion, Inc.']
+    index1_list=['Acquia, Inc', 'Acquire Media', 'Actian Corp.', 'Aquafadas', 'Aria Systems, Inc.', 'Atypon Systems, Inc.',  'Atex', 'Automattic, Inc.', 'Brightcove, Inc.','Ceros, Inc.' ,'Cloudwords, Inc.','Cloudera, Inc.', 'Crafter Software Corp.', 'DNN Corp.', 'Ephox', 'Episerver', 'Evergage, Inc.',  'Impelsys', 'Influitive', 'Kentico Software', 'Krux Digital, Inc.', 'Kenshoo Ltd','Hootsuite Media, Inc.','Lionbridge', 'NewsCred', 'OpenText Corp.', 'Pandora Media, Inc.',  'Skyword, Inc.', 'TapClicks', 'The Nielsen Co.', 'Uberflip', 'Webtrends', 'Wistia, Inc.', 'ZUMOBI', 'Zoomin', 'welocalize']
+    index2_list=['Akamai Technologies', 'Contentful', 'ProQuest, LLC', 'Realview', 'SYSOMOS', 'Smartling, Inc.', 'Viglink']
+    index3_list=['Cision US, Inc.', 'Hortonworks, Inc.', 'MarkLogic Corp.', 'Quark Software, Inc.', 'Reprints Desk, Inc.',  'Salesforce.com, Inc.', 'Splunk, Inc.']
+    index4_list=['ConvertMedia','Hippo B.V.','SAS Institute, Inc.']
+    index6_list=[ 'SAP']
+    for k,v in all_contact_list:
+     try:
+        if k in index0_list:
+            filteredContact_list.append([k,v[0]])
+        elif k in index1_list:
+            filteredContact_list.append([k,v[1]])
+        elif k in index2_list:
+            filteredContact_list.append([k,v[2]])
+        elif k in index3_list:
+            filteredContact_list.append([k,v[3]])
+        elif k in index4_list:
+            filteredContact_list.append([k,v[4]])
+        else:
+            if k in index6_list:
+                filteredContact_list.append([k,v[6]])
+     except:
+         no.append(k)
+    print(no)
+    print("\n\n")
+    print("List of companies with correct contact urls:\n")
+    print(filteredContact_list)
+    error=[]
     no_address_list=[]
     final_dict={}
-    for item in all_contact_list:
+    
+
+    for item in filteredContact_list:
         company_name=item[0]
-        companyContact_url=item[1][0]
+    #  if company_name in a:
+        try:
+            companyContact_url=item[1]
         #getting contact url html 
-        page_html=get_webpage(companyContact_url)
-        if page_html==None:
-            no_address_list.append(company_name)
-            pass
-        else:
-            #getting contact url text
-            page_text=get_webpage_text(page_html)
-            #getting location_list
-            location_list=get_location(page_text)
-            if len(location_list):
-                final_dict.update({company_name:location_list})
-                print("Company name:",company_name)
-                print("Addresses:\n",location_list)
-                print("\n")
-            else:
+            print(company_name,companyContact_url)
+            page_html=get_webpage(companyContact_url)
+            if page_html==None:
                 no_address_list.append(company_name)
+                pass
+            else:
+            #getting contact url text
+                page_text=get_webpage_text(page_html)
+            #getting location_list
+                location_list=get_location(page_text)
+                if len(location_list):
+                    final_dict.update({company_name:location_list})
+                    print("Company name:",company_name)
+                    print("Addresses:\n",location_list)
+                    print("\n")
+                else:
+                    no_address_list.append(company_name)
+        except:
+            error.append(company_name)
+
 
     
-    print("\nCompany with address:\n")
+    print("\nCompany with address:",len(final_dict))
+    print("\n")
     print(final_dict)
-    print("\nList to companies not have address:\n ")
+    print("\nList to companies not have address: ",len(no_address_list))
+    print("\n")
     print(no_address_list)
-    logger.info("NO ADDRESS DETAILS")
+    print("\n")
+    print("error",len(error))
+    print(error)
+    logger.info("\nNO ADDRESS  Companies DETAILS\n")
     #company has no adress store in log file
     for name in no_address_list:
         logger.setLevel(logging.DEBUG)
@@ -209,3 +265,17 @@ if __name__ == '__main__':
     save_to_json(filename,final_dict)
     json_to_csv_file(filename,"company_address.csv")
     print("Company may not have contact page and adress details stored in Log file.\nCheck \"Company_details.log\" ")
+
+    # print("\n\n")
+    # print(all_contact_list)
+    # print("\n\n")
+    # print(filteredContact_list)
+    # print("\n\n")
+    # print(len(all_contact_list))
+    # print(len(no_contact_list))
+    # print(len(filteredContact_list))
+    # print(len(final_dict))
+    # print(len(no_address_list))
+
+
+    
