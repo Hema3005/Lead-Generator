@@ -187,11 +187,12 @@ if __name__ == '__main__':
 
     filteredContact_list=[]
     index0_list= ['Acrolinx GmbH', 'Act-On Software, Inc.', 'Amazon.com, Inc.', 'Apple, Inc.', 'Aptara, Inc.','COGNITIVESCALE', 'Ceros, Inc', 'Ceros, Inc.', 'Clarabridge',  'Connotate', 'EBSCO Industries, Inc.', 'Elsevier', 'Google',  'LinkedIn', 'MadCap Software, Inc.', 'Netflix', 'OneSpot', 'Pivotshare', 'SDL PLC', 'Sitecore Corp. AS', 'Sizmek, Inc.', 'Spotify AB', 'Syncfusion,Inc.', 'TERMINALFOUR, Inc.', 'Wochit','Siteworx, LLC','Syncfusion, Inc.']
-    index1_list=['Acquia, Inc', 'Acquire Media', 'Actian Corp.', 'Aquafadas', 'Aria Systems, Inc.', 'Atypon Systems, Inc.',  'Atex', 'Automattic, Inc.', 'Brightcove, Inc.','Ceros, Inc.' ,'Cloudwords, Inc.','Cloudera, Inc.', 'Crafter Software Corp.', 'DNN Corp.', 'Ephox', 'Episerver', 'Evergage, Inc.',  'Impelsys', 'Influitive', 'Kentico Software', 'Krux Digital, Inc.', 'Kenshoo Ltd','Hootsuite Media, Inc.','Lionbridge', 'NewsCred', 'OpenText Corp.', 'Pandora Media, Inc.',  'Skyword, Inc.', 'TapClicks', 'The Nielsen Co.', 'Uberflip', 'Webtrends', 'Wistia, Inc.', 'ZUMOBI', 'Zoomin', 'welocalize']
+    index1_list=['Acquia, Inc', 'Acquire Media', 'Actian Corp.', 'Aquafadas', 'Aria Systems, Inc.', 'Atypon Systems, Inc.',  'Atex', 'Automattic, Inc.', 'Brightcove, Inc.','Ceros, Inc.' ,'Cloudwords, Inc.','Cloudera, Inc.', 'Crafter Software Corp.','ConvertMedia', 'DNN Corp.', 'Ephox', 'Episerver', 'Evergage, Inc.',  'Impelsys', 'Influitive', 'Kentico Software', 'Krux Digital, Inc.', 'Kenshoo Ltd','Hootsuite Media, Inc.','Lionbridge', 'NewsCred', 'OpenText Corp.', 'Pandora Media, Inc.',  'Skyword, Inc.', 'TapClicks', 'The Nielsen Co.', 'Uberflip', 'Webtrends', 'Wistia, Inc.', 'ZUMOBI', 'Zoomin', 'welocalize']
     index2_list=['Akamai Technologies', 'Contentful', 'ProQuest, LLC', 'Realview', 'SYSOMOS', 'Smartling, Inc.', 'Viglink']
     index3_list=['Cision US, Inc.', 'Hortonworks, Inc.', 'MarkLogic Corp.', 'Quark Software, Inc.', 'Reprints Desk, Inc.',  'Salesforce.com, Inc.', 'Splunk, Inc.']
-    index4_list=['ConvertMedia','Hippo B.V.','SAS Institute, Inc.']
+    index4_list=['Hippo B.V.','SAS Institute, Inc.']
     index6_list=[ 'SAP']
+    no=[]
     for k,v in all_contact_list:
      try:
         if k in index0_list:
